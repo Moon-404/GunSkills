@@ -1,5 +1,6 @@
 package com.moon404.gunskills;
 
+import com.moon404.gunskills.message.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,15 +18,6 @@ import com.moon404.gunskills.init.GunSkillsBlocks;
 import com.moon404.gunskills.init.GunSkillsEffects;
 import com.moon404.gunskills.init.GunSkillsEntities;
 import com.moon404.gunskills.init.GunSkillsItems;
-import com.moon404.gunskills.message.C2SPing;
-import com.moon404.gunskills.message.C2SSlide;
-import com.moon404.gunskills.message.ChangeItemMessage;
-import com.moon404.gunskills.message.DamageIndicatorMessage;
-import com.moon404.gunskills.message.DropItemMessage;
-import com.moon404.gunskills.message.GlowMessage;
-import com.moon404.gunskills.message.S2CPing;
-import com.moon404.gunskills.message.S2CSlide;
-import com.moon404.gunskills.message.ShowDamageMessage;
 import com.moon404.gunskills.struct.WheelItemList;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -90,6 +82,7 @@ public class GunSkills
             GlowMessage.register();
             C2SPing.register();
             S2CPing.register();
+            S2CLift.register();
         });
     }
 }
