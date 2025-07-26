@@ -35,6 +35,8 @@ public class GunSkills
     // Define mod id in a common place for everything to reference
     public static final String MODID = "gunskills";
 
+    public static final int MAX_GUN_NUMBER = 2;
+
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public GunSkills()

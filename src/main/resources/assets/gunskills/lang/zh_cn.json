@@ -101,6 +101,7 @@
     "message.gunskills.login.2": "您可以点击下面的职业或使用/class指令来选择职业",
     "message.gunskills.ping.unit": "格",
     "message.gunskills.recover.disable": "被禁疗无法使用",
+    "message.gunskills.gun_hold_over_limit": "持有的枪械数量超出了限制！",
     "command.gunskills.class.success": "更换职业成功，当前职业：",
     "command.gunskills.class.fail": "更换职业失败，游戏已开始",
     "command.gunskills.choose.fail.1": "无法使用此指令进入测试队伍",
