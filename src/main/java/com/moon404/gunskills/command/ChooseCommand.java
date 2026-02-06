@@ -1,8 +1,9 @@
-package com.moon404.gunskills;
+package com.moon404.gunskills.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.moon404.gunskills.Utils;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

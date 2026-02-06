@@ -1,8 +1,8 @@
 package com.moon404.gunskills.init;
 
-import com.moon404.gunskills.ChooseCommand;
-import com.moon404.gunskills.ClassCommand;
 import com.moon404.gunskills.GunSkills;
+import com.moon404.gunskills.command.ChooseCommand;
+import com.moon404.gunskills.command.ClassCommand;
 
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
