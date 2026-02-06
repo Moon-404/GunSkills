@@ -3,6 +3,7 @@ package com.moon404.gunskills.handler;
 import java.util.Random;
 
 import com.moon404.gunskills.Utils;
+import com.moon404.gunskills.struct.MapGen;
 
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
@@ -17,5 +18,6 @@ public class ServerTickHandler
     {
         if (event.phase != Phase.START) return;
         Utils.setScore(event.getServer().getScoreboard(), "random", "global", random.nextInt());
+        MapGen.tick();
     }
 }

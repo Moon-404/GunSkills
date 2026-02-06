@@ -3,6 +3,7 @@ package com.moon404.gunskills.init;
 import com.moon404.gunskills.GunSkills;
 import com.moon404.gunskills.command.ChooseCommand;
 import com.moon404.gunskills.command.ClassCommand;
+import com.moon404.gunskills.command.MapgenCommand;
 
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,5 +18,6 @@ public class GunSkillsCommands
     {
         ClassCommand.register(event.getDispatcher());
         ChooseCommand.register(event.getDispatcher());
+        MapgenCommand.register(event.getDispatcher());
     }
 }
