@@ -72,22 +72,12 @@ public class StructureGen
     private static final class StructureGenJob
     {
         final ServerLevel level;
-        final int x1, z1, x2, z2;
-        final long seed;
-        final int structuresPerTick;
-        final int minRadius, maxRadius;
         final List<BlockPos> candidates;
         final RandomSource random;
 
         StructureGenJob(ServerLevel level, int x1, int z1, int x2, int z2, long seed, int structuresPerTick)
         {
             this.level = level;
-            this.x1 = x1;
-            this.z1 = z1;
-            this.x2 = x2;
-            this.z2 = z2;
-            this.seed = seed;
-            this.structuresPerTick = structuresPerTick;
             this.random = RandomSource.create(seed);
 
             int minr = Integer.MAX_VALUE, maxr = 0;
@@ -96,11 +86,9 @@ public class StructureGen
                 minr = Math.min(e.radius, minr);
                 maxr = Math.max(e.radius, maxr);
             }
-            this.minRadius = minr;
-            this.maxRadius = maxr;
             this.candidates = PoissonDisk.sample(x1, z1, x2, z2, minr, seed);
 
-            int border = maxr * 2;
+            int border = maxr + 1;
             this.candidates.removeIf(p -> (p.getX() - x1) < border || (p.getZ() - z1) < border || (x2 - p.getX()) < border || (z2 - p.getZ()) < border);
         }
 
@@ -186,7 +174,7 @@ public class StructureGen
                         // 在地基外，平滑到指定格
                         else
                         {
-                            double d = Math.sqrt(dx * dx + dz * dz);
+                            double d = dx + dz;
                             if (d > entry.margin) continue;
 
                             double t = (d - 1) / entry.margin;
@@ -194,10 +182,11 @@ public class StructureGen
                             // 平滑格子低于地面，削除
                             if (smoothY < surfaceY)
                             {
-                                for (int y = smoothY + 1; y <= surfaceY; y++)
+                                for (int y = smoothY; y <= surfaceY; y++)
                                 {
                                     BlockPos p = new BlockPos(x, y, z);
-                                    level.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
+                                    BlockState fill = y == smoothY ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.AIR.defaultBlockState();
+                                    level.setBlock(p, fill, 2);
                                 }
                             }
                             // 平滑格子高于地面，填充
@@ -216,14 +205,8 @@ public class StructureGen
                 
                 template.placeInWorld(level, startPos, BlockPos.ZERO, settings, random, 2);
 
-                BlockPos candidatePos = candidates.get(index);
-                long radiusSqr = entry.radius * entry.radius;
-                candidates.removeIf(p ->
-                {
-                    long dx = p.getX() - candidatePos.getX();
-                    long dz = p.getZ() - candidatePos.getZ();
-                    return (dx * dx + dz * dz) < radiusSqr;
-                });
+                BoundingBox radiusBox = box.inflatedBy(entry.radius);
+                candidates.removeIf(p -> p.getX() >= radiusBox.minX() && p.getX() <= radiusBox.maxX() && p.getZ() >= radiusBox.minZ() && p.getZ() <= radiusBox.maxZ());
                 entry.processed++;
                 return false;
             }

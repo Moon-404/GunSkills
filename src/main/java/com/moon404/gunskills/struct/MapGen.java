@@ -31,8 +31,6 @@ public class MapGen
         private final PerlinTerrain generator;
         private final int cx1, cz1, cx2, cz2;
         private int cx, cz;
-        private final long totalChunks;
-        private long chunksDone = 0;
 
         MapGenJob(ServerLevel level, int x1, int z1, int x2, int z2, int minY, int maxY, int airY, PerlinTerrain generator, int chunkPerTick)
         {
@@ -53,7 +51,6 @@ public class MapGen
             this.cz2 = z2 / 16;
             this.cx = cx1;
             this.cz = cz1;
-            this.totalChunks = (long)(cx2 - cx1 + 1) * (long)(cz2 - cz1 + 1);
         }
 
         boolean tick()
@@ -99,7 +96,6 @@ public class MapGen
                 }
 
                 processed++;
-                chunksDone++;
                 cx++;
                 if (cx > cx2)
                 {
