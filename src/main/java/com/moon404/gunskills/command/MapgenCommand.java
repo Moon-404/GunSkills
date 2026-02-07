@@ -68,7 +68,7 @@ public class MapgenCommand
                     command.getSource().sendFailure(Component.translatable("command.gunskills.mapgen.structure.add.fail.2"));
                     return 0;
                 }
-                if (StructureGen.add(path, count, radius, margin))
+                if (StructureGen.add(command.getSource().getLevel(), path, count, radius, margin))
                 {
                     command.getSource().sendSuccess(() -> Component.translatable("command.gunskills.mapgen.structure.add.success", path.toString(), count, radius, margin), true);
                     return 1;

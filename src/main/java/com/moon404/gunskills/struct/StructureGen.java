@@ -6,6 +6,7 @@ import java.util.List;
 import com.moon404.gunskills.GunSkills;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -26,14 +27,17 @@ public class StructureGen
         public final int count;
         public final int radius;
         public final int margin;
+        public final int length;
         public int processed;
+        public List<BlockPos> validPos; 
 
-        public Entry(ResourceLocation id, int count, int radius, int margin)
+        public Entry(ResourceLocation id, int count, int radius, int margin, int length)
         {
             this.id = id;
             this.count = count;
             this.radius = radius;
             this.margin = margin;
+            this.length = length;
             this.processed = 0;
         }
     }
@@ -48,10 +52,13 @@ public class StructureGen
         return true;
     }
 
-    public static boolean add(ResourceLocation id, int count, int radius, int margin)
+    public static boolean add(ServerLevel level, ResourceLocation id, int count, int radius, int margin)
     {
         if (current != null) return false;
-        REGISTRY.add(new Entry(id, count, radius, margin));
+        StructureTemplate template = level.getStructureManager().get(id).get();
+        Vec3i size = template.getSize();
+        int length = Math.max(size.getX(), size.getZ()) / 2 + 1;
+        REGISTRY.add(new Entry(id, count, radius, margin, length));
         return true;
     }
 
@@ -72,7 +79,6 @@ public class StructureGen
     private static final class StructureGenJob
     {
         final ServerLevel level;
-        final List<BlockPos> candidates;
         final RandomSource random;
 
         StructureGenJob(ServerLevel level, int x1, int z1, int x2, int z2, long seed, int structuresPerTick)
@@ -83,13 +89,14 @@ public class StructureGen
             int minr = Integer.MAX_VALUE, maxr = 0;
             for (Entry e : REGISTRY)
             {
-                minr = Math.min(e.radius, minr);
-                maxr = Math.max(e.radius, maxr);
+                minr = Math.min(e.radius + e.length, minr);
+                maxr = Math.max(e.radius + e.length, maxr);
             }
-            this.candidates = PoissonDisk.sample(x1, z1, x2, z2, minr, seed);
+            List<BlockPos> candidates = PoissonDisk.sample(x1, z1, x2, z2, minr, seed);
 
             int border = maxr + 1;
-            this.candidates.removeIf(p -> (p.getX() - x1) < border || (p.getZ() - z1) < border || (x2 - p.getX()) < border || (z2 - p.getZ()) < border);
+            candidates.removeIf(p -> (p.getX() - x1) < border || (p.getZ() - z1) < border || (x2 - p.getX()) < border || (z2 - p.getZ()) < border);
+            for (Entry entry : REGISTRY) entry.validPos = new ArrayList<>(candidates);
         }
 
         boolean tick()
@@ -97,13 +104,13 @@ public class StructureGen
             for (Entry entry : REGISTRY)
             {
                 if (entry.processed >= entry.count) continue;
-                if (candidates.isEmpty())
+                if (entry.validPos.isEmpty())
                 {
-                    if (candidates.isEmpty()) GunSkills.LOGGER.warn("StructureGen no pos left!");
+                    if (entry.validPos.isEmpty()) GunSkills.LOGGER.warn("StructureGen no pos left!");
                     return true;
                 }
-                int index = random.nextInt(candidates.size());
-                BlockPos startPos = candidates.get(index);
+                int index = random.nextInt(entry.validPos.size());
+                BlockPos startPos = entry.validPos.get(index);
 
                 StructureTemplate template = level.getStructureManager().get(entry.id).get();
 
@@ -204,9 +211,11 @@ public class StructureGen
                 }
                 
                 template.placeInWorld(level, startPos, BlockPos.ZERO, settings, random, 2);
-
-                BoundingBox radiusBox = box.inflatedBy(entry.radius);
-                candidates.removeIf(p -> p.getX() >= radiusBox.minX() && p.getX() <= radiusBox.maxX() && p.getZ() >= radiusBox.minZ() && p.getZ() <= radiusBox.maxZ());
+                for (Entry entry2 : REGISTRY)
+                {
+                    BoundingBox radiusBox = box.inflatedBy(entry.radius + entry2.length);
+                    entry2.validPos.removeIf(p -> p.getX() >= radiusBox.minX() && p.getX() <= radiusBox.maxX() && p.getZ() >= radiusBox.minZ() && p.getZ() <= radiusBox.maxZ());
+                }
                 entry.processed++;
                 return false;
             }
