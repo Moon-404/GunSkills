@@ -42,6 +42,7 @@ public class StructureGen
         }
     }
 
+    private static int MAXHEIGHT = 100;
     private static StructureGenJob current;
     private static final List<Entry> REGISTRY = new ArrayList<>();
 
@@ -128,6 +129,7 @@ public class StructureGen
                 settings.setMirror(mirror);
 
                 int startY = level.getHeight(Heightmap.Types.WORLD_SURFACE, startPos.getX(), startPos.getZ());
+                if (startY > MAXHEIGHT) startY = findGroundBelow(level, startPos.getX(), startPos.getZ(), MAXHEIGHT) + 1;
                 startPos = startPos.offset(0, startY, 0);
                 BoundingBox box = template.getBoundingBox(settings, startPos);
 
@@ -144,7 +146,7 @@ public class StructureGen
                         {
                             BlockPos p = new BlockPos(x, y, z);
                             BlockState state = level.getBlockState(p);
-                            if (state.isAir() || !state.getFluidState().isEmpty()) continue;
+                            if (state.isAir()) continue;
                             level.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
                         }
                     }
@@ -156,6 +158,7 @@ public class StructureGen
                     for (int z = box.minZ() - entry.margin; z <= box.maxZ() + entry.margin; z++)
                     {
                         int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1; // 地面所在格
+                        if (surfaceY > MAXHEIGHT) surfaceY = findGroundBelow(level, x, z, MAXHEIGHT);
                         int targetTop = box.minY() - 1; // 地基的下一格
 
                         int dx = 0;
@@ -173,7 +176,7 @@ public class StructureGen
                             {
                                 BlockPos p = new BlockPos(x, y, z);
                                 BlockState cur = level.getBlockState(p);
-                                if (!cur.isAir() && cur.getFluidState().isEmpty()) continue;
+                                if (!cur.isAir()) continue;
                                 BlockState fill = y == targetTop ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.DIRT.defaultBlockState();
                                 level.setBlock(p, fill, 2);
                             }
@@ -220,6 +223,21 @@ public class StructureGen
                 return false;
             }
             return true;
+        }
+
+        int findGroundBelow(ServerLevel level, int x, int z, int maxY)
+        {
+            int minY = level.getMinBuildHeight();
+            int y = Math.min(maxY, level.getMaxBuildHeight() - 1);
+            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
+            while (y > minY)
+            {
+                pos.setY(y);
+                BlockState state = level.getBlockState(pos);
+                if (!state.isAir()) return y;
+                y--;
+            }
+            return minY;
         }
     }
 }
