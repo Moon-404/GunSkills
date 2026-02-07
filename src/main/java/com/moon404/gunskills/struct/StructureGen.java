@@ -6,7 +6,6 @@ import java.util.List;
 import com.moon404.gunskills.GunSkills;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -119,8 +118,6 @@ public class StructureGen
                 BlockPos startPos = candidates.get(index);
 
                 StructureTemplate template = level.getStructureManager().get(entry.id).get();
-                Vec3i size = template.getSize();
-                BlockPos pivot = new BlockPos(size.getX() / 2, 0, size.getZ() / 2);
 
                 Rotation rotation = Rotation.getRandom(random);
                 Mirror mirror = switch (random.nextInt(3))
@@ -132,13 +129,16 @@ public class StructureGen
 
                 StructurePlaceSettings settings = new StructurePlaceSettings();
                 settings.setIgnoreEntities(false);
-                settings.setRotationPivot(pivot);
                 settings.setRotation(rotation);
                 settings.setMirror(mirror);
 
                 int startY = level.getHeight(Heightmap.Types.WORLD_SURFACE, startPos.getX(), startPos.getZ());
                 startPos = startPos.offset(0, startY, 0);
                 BoundingBox box = template.getBoundingBox(settings, startPos);
+
+                BlockPos center = new BlockPos((box.minX() + box.maxX()) / 2, startY, (box.minZ() + box.maxZ()) / 2);
+                startPos = startPos.offset(startPos).subtract(center);
+                box = template.getBoundingBox(settings, startPos);
 
                 // 清除已有方块
                 for (int x = box.minX(); x <= box.maxX(); x++)
@@ -214,14 +214,14 @@ public class StructureGen
                     }
                 }
                 
-                template.placeInWorld(level, startPos, pivot, settings, random, 2);
+                template.placeInWorld(level, startPos, BlockPos.ZERO, settings, random, 2);
 
-                BlockPos base = startPos.offset(pivot);
+                BlockPos candidatePos = candidates.get(index);
                 long radiusSqr = entry.radius * entry.radius;
                 candidates.removeIf(p ->
                 {
-                    long dx = p.getX() - base.getX();
-                    long dz = p.getZ() - base.getZ();
+                    long dx = p.getX() - candidatePos.getX();
+                    long dz = p.getZ() - candidatePos.getZ();
                     return (dx * dx + dz * dz) < radiusSqr;
                 });
                 entry.processed++;
