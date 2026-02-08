@@ -188,6 +188,54 @@ spreadplayers 指令现在会将目标生成在 最高非空气方块低于 maxH
 
 - `/choose` 可以改变自己的队伍
 
+- `/mapgen` 可以随机生成地图
+
+### 关于 mapgen
+
+这是一系列用于随机生成地形、随机放置结构的指令。
+
+```mcfunction
+mapgen start <x1> <z1> <x2> <z2> <minY> <maxY> <airY> [seed] <scale> <speed>
+```
+
+该指令可以使用柏林噪声生成地形，下面是参数说明：
+
+- `x1 z1 x2 z2` 用于控制范围
+- `minY maxY` 用于控制最高和最低高度
+- `airY` 用于控制清空高度，低于该高度的方块会被替换为空气
+- `seed` 【可选】控制种子，不填则随机
+- `scale` 控制缩放，推荐 32
+- `speed` 每个 tick 处理的区块数量
+
+```mcfunction
+mapgen structure clear
+```
+
+该指令用于清空结构列表。
+
+```mcfunction
+mapgen structure add <path> <count> <radius> <margin>
+```
+
+该指令用于向结构列表添加一个结构，推荐先添加大结构再添加小结构，下面是参数说明：
+
+- `path` 是结构模板名
+- `count` 是结构放置数量
+- `radius` 是结构额外范围，例如 5x7 的结构，如果 radius 为 1，则 7x9 的范围内都不会有其它结构生成
+- `margin` 是结构的地形过渡范围，范围中的地面会被过渡处理，建议不要超过 radius
+
+```mcfunction
+mapgen structure start <x1> <z1> <x2> <z2> [seed] <speed>
+```
+
+该指令根据结构列表使用泊松盘算法生成结构，下面是参数说明：
+
+- `x1 z1 x2 z2` 用于控制范围
+- `seed` 【可选】控制种子，不填则随机
+- `speed` 每个 tick 处理的结构数量
+
+[枪战大逃杀数据包](https://github.com/Moon-404/GunBattleRoyale/tree/datapack-mapgen) 是一个可以参考的使用样例。
+
 ## 数据包相关
 
 模组使用了一些计分板和mcfunction来进行更好的数据包驱动。
