@@ -175,8 +175,8 @@ public class StructureGen
                             for (int y = surfaceY + 1; y <= targetTop; y++)
                             {
                                 BlockPos p = new BlockPos(x, y, z);
-                                BlockState cur = level.getBlockState(p);
-                                if (!cur.isAir()) continue;
+                                BlockState state = level.getBlockState(p);
+                                if (!state.isAir()) continue;
                                 BlockState fill = y == targetTop ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.DIRT.defaultBlockState();
                                 level.setBlock(p, fill, 2);
                             }

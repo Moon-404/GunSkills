@@ -19,6 +19,7 @@ import net.minecraft.world.phys.HitResult;
 public class SmokeEntity extends ThrowableItemProjectile
 {
     private int activeTickCount;
+    private int anchorX, anchorY, anchorZ;
     private static final int RADIUS = Smoke.RADIUS;
 
     public SmokeEntity(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel)
@@ -38,6 +39,9 @@ public class SmokeEntity extends ThrowableItemProjectile
         super.onHit(pResult);
         this.setDeltaMovement(0, 0, 0);
         this.activeTickCount = this.tickCount;
+        this.anchorX = this.getBlockX();
+        this.anchorY = this.getBlockY();
+        this.anchorZ = this.getBlockZ();
     }
 
     private static double distance(BlockPos pos1, BlockPos pos2)
@@ -61,6 +65,10 @@ public class SmokeEntity extends ThrowableItemProjectile
             this.setDeltaMovement(0, 0, 0);
         }
         super.tick();
+        if (this.activeTickCount > -1)
+        {
+            this.setPos(this.anchorX, this.anchorY, this.anchorZ);
+        }
         if (this.level() instanceof ServerLevel level && this.tickCount - this.activeTickCount > Smoke.DURATION * 20)
         {
             Iterable<BlockPos> blockPoses = BlockPos.betweenClosed(this.getBlockX() - RADIUS, this.getBlockY() - RADIUS, this.getBlockZ() - RADIUS,

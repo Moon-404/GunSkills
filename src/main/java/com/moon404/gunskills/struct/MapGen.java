@@ -83,14 +83,15 @@ public class MapGen
                         for (int y = minY; y < targetY; y++)
                         {
                             pos.set(x, y, z);
-                            level.setBlock(pos, dirt, 2);
+                            level.setBlock(pos, dirt, 50);
                         }
                         pos.set(x, targetY, z);
-                        level.setBlock(pos, grass, 2);
+                        level.setBlock(pos, grass, 50);
                         for (int y = targetY + 1; y <= airY; y++)
                         {
                             pos.set(x, y, z);
-                            if (!level.getBlockState(pos).isAir()) level.setBlock(pos, air, 2);
+                            BlockState state = level.getBlockState(pos);
+                            if (!state.isAir()) level.setBlock(pos, air, 50);
                         }
                     }
                 }

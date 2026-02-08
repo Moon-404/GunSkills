@@ -41,7 +41,7 @@ public class GunSkillsItems
     public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, GunSkills.MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, GunSkills.MODID);
 
-    public static final RegistryObject<Item> VERSION = REGISTER.register("0.6.0", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> VERSION = REGISTER.register("0.6.1", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> SHIELD_CELL = REGISTER.register("shield_cell", () -> new ShieldCell(new Item.Properties().food(RecoverItem.RECOVER_ITEM)));
     public static final RegistryObject<Item> SHIELD_BATTERY = REGISTER.register("shield_battery", () -> new ShieldBattery(new Item.Properties().food(RecoverItem.RECOVER_ITEM)));
