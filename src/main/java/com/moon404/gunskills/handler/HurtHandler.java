@@ -12,6 +12,7 @@ import com.moon404.gunskills.struct.DamageInfo;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +27,7 @@ public class HurtHandler
     public static void onLivingDamage(LivingHurtEvent event)
     {
         DamageSource source = event.getSource();
-        if (event.getEntity() instanceof Player player && player.damageSources().fall() == event.getSource())
+        if (event.getEntity() instanceof Player player && event.getSource().is(DamageTypes.FALL))
         {
             ItemStack itemStack = player.getOffhandItem();
             if (itemStack.getItem() instanceof Boot item && item.canUse(player))
@@ -44,7 +45,7 @@ public class HurtHandler
 
         if (source.getEntity() instanceof Player a && event.getEntity() instanceof Player b && a.getTeam() == b.getTeam())
         {
-            event.setCanceled(true);
+            if (!event.getSource().is(DamageTypes.MOB_ATTACK)) event.setCanceled(true);
             return;
         }
 
