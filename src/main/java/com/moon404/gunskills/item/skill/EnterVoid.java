@@ -3,6 +3,8 @@ package com.moon404.gunskills.item.skill;
 import com.moon404.gunskills.struct.ClassType;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
@@ -35,21 +37,45 @@ public class EnterVoid extends SkillItem
         return -1;
     }
 
+    private static int getFreeHand(Inventory inventory)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (inventory.items.get(i).isEmpty())
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void active(Player player)
     {
         Inventory inventory = player.getInventory();
-        int freeBagSlot = getFreeSlot(inventory);
-        if (freeBagSlot >= 0)
+        int freeHandSlot = getFreeHand(inventory);
+        if (freeHandSlot >= 0)
         {
-            ItemStack itemStack = player.getMainHandItem();
-            if (!itemStack.isEmpty())
+            inventory.selected = freeHandSlot;
+            if (player instanceof ServerPlayer serverPlayer)
             {
-                inventory.setItem(freeBagSlot, itemStack.copy());
-                inventory.removeItem(itemStack);
+                serverPlayer.connection.send(new ClientboundSetCarriedItemPacket(freeHandSlot));
             }
         }
-        freeBagSlot = getFreeSlot(inventory);
+        else
+        {
+            int freeBagSlot = getFreeSlot(inventory);
+            if (freeBagSlot >= 0)
+            {
+                ItemStack itemStack = player.getMainHandItem();
+                if (!itemStack.isEmpty())
+                {
+                    inventory.setItem(freeBagSlot, itemStack.copy());
+                    inventory.removeItem(itemStack);
+                }
+            }
+        }
+        int freeBagSlot = getFreeSlot(inventory);
         if (freeBagSlot >= 0)
         {
             ItemStack itemStack = player.getOffhandItem();
@@ -60,6 +86,5 @@ public class EnterVoid extends SkillItem
             }
         }
         player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, DURATION * 20, 0, false, false, true));
-        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, DURATION * 20, 0, false, false, true));
     }
 }

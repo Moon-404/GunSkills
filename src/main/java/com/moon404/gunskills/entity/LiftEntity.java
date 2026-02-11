@@ -45,7 +45,7 @@ public class LiftEntity extends Marker
             {
                 int lv = (int) (this.getY() + detectAreaHeight - player.getY());
 
-                player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, lv, false, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 2, lv * 2, false, false, true));
             }
         }
     }

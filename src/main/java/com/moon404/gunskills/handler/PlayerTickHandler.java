@@ -22,18 +22,16 @@ public class PlayerTickHandler
         if (event.phase != Phase.END) return;
         if (event.side != LogicalSide.SERVER) return;
 
-        if (player.hasEffect(MobEffects.BLINDNESS))
+        if (player.hasEffect(MobEffects.INVISIBILITY))
         {
             Item holding = player.getInventory().getSelected().getItem();
             if (!(holding instanceof AirItem) && holding != GunSkillsItems.VOID.get())
             {
                 player.removeEffect(MobEffects.INVISIBILITY);
-                player.removeEffect(MobEffects.BLINDNESS);
             }
             else if (player.hasEffect(MobEffects.GLOWING))
             {
                 player.removeEffect(MobEffects.INVISIBILITY);
-                player.removeEffect(MobEffects.BLINDNESS);
             }
         }
 
