@@ -17,7 +17,7 @@ public class SkillBag extends SkillItem
     public static List<Item> attackItems = Arrays.asList(
         GunSkillsItems.SILENCE.get(),
         GunSkillsItems.SNARE.get(),
-        GunSkillsItems.FAST.get(),
+        GunSkillsItems.SLOW.get(),
         GunSkillsItems.SMOKE.get()
     );
     public static List<Item> rogueItems = Arrays.asList(

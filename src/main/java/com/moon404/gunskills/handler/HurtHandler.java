@@ -3,6 +3,7 @@ package com.moon404.gunskills.handler;
 import com.moon404.gunskills.item.skill.Boot;
 import com.moon404.gunskills.item.skill.Fast;
 import com.moon404.gunskills.item.skill.Ire;
+import com.moon404.gunskills.item.skill.Slow;
 import com.moon404.gunskills.message.DamageIndicatorMessage;
 import com.moon404.gunskills.message.GlowMessage;
 import com.moon404.gunskills.message.ShowDamageMessage;
@@ -75,6 +76,12 @@ public class HurtHandler
                 event.getEntity().addEffect(new MobEffectInstance(MobEffects.GLOWING, Ire.DURATION * 20, 0, false, false, true));
                 if (event.getEntity() instanceof Player target)
                     GlowMessage.sendToTeam(from.getTeam(), target, Ire.DURATION * 20);
+                item.enterCooldown(from);
+            }
+
+            if (itemStack.getItem() instanceof Slow item && !event.getEntity().hasEffect(MobEffects.MOVEMENT_SLOWDOWN) && item.canUse(from))
+            {
+                event.getEntity().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, Slow.DURATION * 20, 4, false, false, true));
                 item.enterCooldown(from);
             }
         }

@@ -31,6 +31,7 @@ import com.moon404.gunskills.item.skill.Scan;
 import com.moon404.gunskills.item.skill.ShieldBottle;
 import com.moon404.gunskills.item.skill.Silence;
 import com.moon404.gunskills.item.skill.SkillBag;
+import com.moon404.gunskills.item.skill.Slow;
 import com.moon404.gunskills.item.skill.Smoke;
 import com.moon404.gunskills.item.skill.Snare;
 import com.moon404.gunskills.item.skill.Stim;
@@ -60,6 +61,7 @@ public class GunSkillsItems
     public static final RegistryObject<Item> PEARL = REGISTER.register("pearl", () -> new Pearl(new Item.Properties()));
     public static final RegistryObject<Item> TOTEM = REGISTER.register("totem", () -> new Totem(new Item.Properties()));
     public static final RegistryObject<Item> FAST = REGISTER.register("fast", () -> new Fast(new Item.Properties()));
+    public static final RegistryObject<Item> SLOW = REGISTER.register("slow", () -> new Slow(new Item.Properties()));
     public static final RegistryObject<Item> IRE = REGISTER.register("ire", () -> new Ire(new Item.Properties()));
     public static final RegistryObject<Item> SCAN = REGISTER.register("scan", () -> new Scan(new Item.Properties()));
     public static final RegistryObject<Item> PURIFY = REGISTER.register("purify", () -> new Purify(new Item.Properties()));
@@ -92,6 +94,7 @@ public class GunSkillsItems
             output.accept(PEARL.get());
             output.accept(TOTEM.get());
             output.accept(FAST.get());
+            output.accept(SLOW.get());
             output.accept(IRE.get());
             output.accept(SCAN.get());
             output.accept(PURIFY.get());

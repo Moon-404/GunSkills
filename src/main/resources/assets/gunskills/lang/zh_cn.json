@@ -45,6 +45,8 @@
     "item.gunskills.totem.tooltip.3": "没有护盾时不会生效",
     "item.gunskills.fast": "加快节奏",
     "item.gunskills.fast.tooltip": "受到伤害时获得 %s 秒速度III",
+    "item.gunskills.slow": "迟缓镣铐",
+    "item.gunskills.slow.tooltip": "造成伤害时令目标大幅减速 %s 秒",
     "item.gunskills.ire": "战斗怒火",
     "item.gunskills.ire.tooltip": "造成伤害时令目标发光 %s 秒",
     "item.gunskills.scan": "侦察敌情",
