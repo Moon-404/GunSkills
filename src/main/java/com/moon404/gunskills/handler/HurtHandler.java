@@ -35,7 +35,7 @@ public class HurtHandler
             }
             else
             {
-                double duration = Math.sqrt(event.getAmount()) * 10;
+                double duration = Math.cbrt(event.getAmount()) * 10;
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, (int)duration, 4, false, false, true));
             }
             event.setCanceled(true);
