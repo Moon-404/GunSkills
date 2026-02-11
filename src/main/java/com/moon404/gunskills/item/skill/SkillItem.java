@@ -62,6 +62,7 @@ public class SkillItem extends Item
 
     public void enterCooldown(Player player)
     {
+        if (player.isCreative()) return;
         player.getCooldowns().addCooldown(this, this.getCooldown(player));
     }
     
