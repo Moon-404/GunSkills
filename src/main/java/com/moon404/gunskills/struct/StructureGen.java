@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.moon404.gunskills.GunSkills;
+import com.moon404.gunskills.Utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -129,7 +130,7 @@ public class StructureGen
                 settings.setMirror(mirror);
 
                 int startY = level.getHeight(Heightmap.Types.WORLD_SURFACE, startPos.getX(), startPos.getZ());
-                if (startY > MAXHEIGHT) startY = findGroundBelow(level, startPos.getX(), startPos.getZ(), MAXHEIGHT) + 1;
+                if (startY > MAXHEIGHT) startY = Utils.findGroundBelow(level, startPos.getX(), startPos.getZ(), MAXHEIGHT) + 1;
                 startPos = startPos.offset(0, startY, 0);
                 BoundingBox box = template.getBoundingBox(settings, startPos);
 
@@ -158,7 +159,7 @@ public class StructureGen
                     for (int z = box.minZ() - entry.margin; z <= box.maxZ() + entry.margin; z++)
                     {
                         int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) - 1; // 地面所在格
-                        if (surfaceY > MAXHEIGHT) surfaceY = findGroundBelow(level, x, z, MAXHEIGHT);
+                        if (surfaceY > MAXHEIGHT) surfaceY = Utils.findGroundBelow(level, x, z, MAXHEIGHT);
                         int targetTop = box.minY() - 1; // 地基的下一格
 
                         int dx = 0;
@@ -223,21 +224,6 @@ public class StructureGen
                 return false;
             }
             return true;
-        }
-
-        int findGroundBelow(ServerLevel level, int x, int z, int maxY)
-        {
-            int minY = level.getMinBuildHeight();
-            int y = Math.min(maxY, level.getMaxBuildHeight() - 1);
-            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
-            while (y > minY)
-            {
-                pos.setY(y);
-                BlockState state = level.getBlockState(pos);
-                if (!state.isAir()) return y;
-                y--;
-            }
-            return minY;
         }
     }
 }

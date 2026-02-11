@@ -7,10 +7,13 @@ import com.moon404.gunskills.item.skill.Charge;
 
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerFunctionManager;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.scores.Scoreboard;
 
 public class Utils
@@ -44,5 +47,20 @@ public class Utils
         if (player.experienceLevel == 0) return 0;
         int bonus = player.hasEffect(GunSkillsEffects.CHARGE.get()) ? Charge.AMOUNT : 0;
         return (player.experienceLevel + 1) * 4 + bonus;
+    }
+
+    public static int findGroundBelow(ServerLevel level, int x, int z, int maxY)
+    {
+        int minY = level.getMinBuildHeight();
+        int y = Math.min(maxY, level.getMaxBuildHeight() - 1);
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
+        while (y > minY)
+        {
+            pos.setY(y);
+            BlockState state = level.getBlockState(pos);
+            if (!state.isAir()) return y;
+            y--;
+        }
+        return minY;
     }
 }
