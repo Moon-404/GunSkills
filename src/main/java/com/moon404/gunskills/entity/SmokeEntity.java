@@ -18,7 +18,7 @@ import net.minecraft.world.phys.HitResult;
 
 public class SmokeEntity extends ThrowableItemProjectile
 {
-    private int activeTickCount;
+    public int activeTickCount;
     private int anchorX, anchorY, anchorZ;
     private static final int RADIUS = Smoke.RADIUS;
 

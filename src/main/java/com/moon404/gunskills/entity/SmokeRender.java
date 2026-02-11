@@ -26,6 +26,7 @@ public class SmokeRender extends EntityRenderer<SmokeEntity>
     @Override
     public void render(SmokeEntity pEntity, float pEntityYaw, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight)
     {
+        if (pEntity.activeTickCount > -1) return;
         Minecraft.getInstance().getItemRenderer().renderStatic(pEntity.getItem(), ItemDisplayContext.NONE, pPackedLight, OverlayTexture.NO_OVERLAY, pPoseStack, pBuffer, pEntity.level(), 0);
     }
 }
