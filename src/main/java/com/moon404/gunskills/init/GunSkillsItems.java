@@ -21,6 +21,7 @@ import com.moon404.gunskills.item.skill.Charge;
 import com.moon404.gunskills.item.skill.EnterVoid;
 import com.moon404.gunskills.item.skill.Exhibit;
 import com.moon404.gunskills.item.skill.Fast;
+import com.moon404.gunskills.item.skill.Fire;
 import com.moon404.gunskills.item.skill.Glow;
 import com.moon404.gunskills.item.skill.HealthBottle;
 import com.moon404.gunskills.item.skill.Ire;
@@ -71,6 +72,7 @@ public class GunSkillsItems
     public static final RegistryObject<Item> SILENCE = REGISTER.register("silence", () -> new Silence(new Item.Properties()));
     public static final RegistryObject<Item> BOOT = REGISTER.register("boot", () -> new Boot(new Item.Properties()));
     public static final RegistryObject<Item> SMOKE = REGISTER.register("smoke", () -> new Smoke(new Item.Properties()));
+    public static final RegistryObject<Item> FIRE = REGISTER.register("fire", () -> new Fire(new Item.Properties()));
     // skill_bag 必须最后一个注册
     public static final RegistryObject<Item> SKILL_BAG = REGISTER.register("skill_bag", () -> new SkillBag(new Item.Properties()));
 
@@ -104,6 +106,7 @@ public class GunSkillsItems
             output.accept(SILENCE.get());
             output.accept(BOOT.get());
             output.accept(SMOKE.get());
+            output.accept(FIRE.get());
             output.accept(SKILL_BAG.get());
         }).build());
 }

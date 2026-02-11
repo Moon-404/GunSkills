@@ -16,7 +16,7 @@ public class SkillBag extends SkillItem
     private static int counter = 0;
     public static List<Item> attackItems = Arrays.asList(
         GunSkillsItems.SILENCE.get(),
-        GunSkillsItems.SNARE.get(),
+        GunSkillsItems.FIRE.get(),
         GunSkillsItems.SLOW.get(),
         GunSkillsItems.SMOKE.get()
     );

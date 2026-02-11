@@ -2,6 +2,7 @@ package com.moon404.gunskills.init;
 
 import com.moon404.gunskills.GunSkills;
 import com.moon404.gunskills.entity.ExhibitEntity;
+import com.moon404.gunskills.entity.FireEntity;
 import com.moon404.gunskills.entity.HealthBottleEntity;
 import com.moon404.gunskills.entity.LiftEntity;
 import com.moon404.gunskills.entity.PearlEntity;
@@ -44,4 +45,7 @@ public class GunSkillsEntities
     public static final RegistryObject<EntityType<SmokeEntity>> SMOKE =
         REGISTER.register("smoke", () ->
             EntityType.Builder.<SmokeEntity>of(SmokeEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build("smoke"));
+    public static final RegistryObject<EntityType<FireEntity>> FIRE =
+        REGISTER.register("fire", () ->
+            EntityType.Builder.<FireEntity>of(FireEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).build("fire"));
 }
