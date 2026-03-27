@@ -11,7 +11,8 @@
         "PlayerMixin",
         "PlayerModelMixin",
         "SpreadPlayersMixin",
-        "MoveCheckMixin"
+        "MoveCheckMixin",
+        "WorldBorderMixin"
     ],
     "client": [
         "GlowingMixin",
